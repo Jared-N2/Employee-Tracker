@@ -16,11 +16,7 @@ const connection = mysql.createConnection({
     database: 'employee_db',
 });
 
-connection.connect((err) => {
-    if (err) throw err;
-    console.log('connected!')
-    employee();
-});
+
 
 const employee = () => {
     prompt({
@@ -33,9 +29,9 @@ const employee = () => {
             'View all employees by Manager',
             'Add employee',
             'Add department',
-            'Add role',
+            'Add roles',
             'Remove employee',
-            'update employee role',
+            'update employee roles',
             'Update employee Manager',
             'EXIT'
         ],
@@ -51,7 +47,7 @@ const employee = () => {
                     break;
 
                 case 'View all employee roles':
-                    roleSearch();
+                    rolesSearch();
                     break;
 
                 case 'Add employee':
@@ -62,16 +58,16 @@ const employee = () => {
                     addDepartment();
                     break;
 
-                case 'Add role':
-                    addRole();
+                case 'Add roles':
+                    addroles();
                     break;
 
                 case 'Remove employee':
                     removeEmployee();
                     break;
 
-                case 'update employee role':
-                    updateRole();
+                case 'update employee roles':
+                    updateroles();
                     break;
 
                 case 'Update employee Manager':
@@ -103,9 +99,9 @@ const departmentSearch = () => {
     };
 
 };
-const roleSearch = () => {
+const rolesSearch = () => {
 
-    const query = 'SELECT  * FROM role';
+    const query = 'SELECT  * FROM roles';
     connection.query(query), (err, res) => {
         console.table(res)
         employee()
@@ -128,8 +124,8 @@ const addEmployee = () => {
         },
         {
             type: 'input',
-            message: 'what is the employees role id?',
-            name: 'role_id'
+            message: 'what is the employees roles id?',
+            name: 'roles_id'
         }
 
     ]).then((employee) => {
@@ -157,12 +153,12 @@ const addDepartment = () => {
     
 };
 
-const addRole = () => {
+const addroles = () => {
         prompt([
             {
                 type: 'input',
-                message: 'What is the employees role?',
-                name: 'role'
+                message: 'What is the employees roles?',
+                name: 'roles'
             },
             {
                 type: 'input',
@@ -177,16 +173,24 @@ const addRole = () => {
 
         ]).then(function (answer) {
             connection.query(
-                `INSERT INTO department SET ?`,
+                `INSERT INTO roles SET ?`,
                 {
-                    role_id: answer.role,
+                    title: answer.roles,
                     salary: answer.salary,
                     department_id: answer.department
-                })
+                }, function (error) {
+                    if (error) throw error;})
+    
                 employee();
 
             })
 };
+
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('connected!')
+    employee();
+});
             
 // employee();
 
